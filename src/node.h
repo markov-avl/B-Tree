@@ -3,7 +3,7 @@
 
 
 template<typename data>
-class Node {
+struct Node {
     int num;
     bool leaf;
     Node<data> **links;
@@ -25,6 +25,97 @@ class Node {
         }
         delete[] links;
         delete[] keys;
+    }
+
+    int find(data key) {
+        int i;
+        for (i = 0; i < num; ++i) {
+            if (key <= keys[i]) {
+                ++i;
+                break;
+            }
+            if (i == num - 1) {
+                i = num;
+            }
+        }
+        --i;
+        if (i != num && key == keys[i]) {
+            return i;
+        } else if (leaf) {
+            return -1;
+        } else {
+            return links[i]->find(key);
+        }
+    }
+
+    bool remove(data key) {
+        int i;
+        for (i = 0; i < num; ++i) {
+            if (key <= keys[i]) {
+                ++i;
+                break;
+            }
+            if (i == num - 1)
+                i = num;
+        }
+        --i;
+        if (i != num && key == keys[i]) {
+            if (leaf) {
+                for (int j = i; j < num - 1; ++j) {
+                    keys[j] = keys[j + 1];
+                }
+                --num;
+                keys[num] = 0;
+                return true;
+            } else {
+                if (links[i]->num >= 2) {
+                    auto nkey = getMax(i);
+                    keys[i] = nkey;
+                    return links[i]->remove(nkey);
+                } else if (links[i + 1]->num >= 2) {
+                    auto nkey = getMin(i + 1);
+                    keys[i] = nkey;
+                    return links[i + 1]->remove(nkey);
+                } else {
+                    mergeChild(i);
+                    return links[i]->remove(key);
+                }
+            }
+
+        } else {
+            if (leaf) {
+                return false;
+            } else {
+                if (links[i]->num == 1) {
+                    if (i > 0 && links[i - 1]->num >= 2) {
+                        stealLeft(i);
+                    } else if (i < num && links[i + 1]->num >= 2) {
+                        stealRight(i);
+                    } else {
+                        if (i > 0) {
+                            mergeChild(i - 1);
+                            --i;
+                        } else {
+                            mergeChild(i);
+                        }
+                    }
+                }
+                return links[i]->remove(key);
+            }
+        }
+    }
+
+    void print(int d) {
+        std::cout << "\nlvl=" << d << "=|";
+        for (int i = 0; i < num; ++i) {
+            std::cout << keys[i] << "|";
+        }
+
+        if (!leaf) {
+            for (int i = 0; i <= num; ++i) {
+                links[i]->print(d + 1);
+            }
+        }
     }
 
     void splitChild(int i) {
@@ -52,7 +143,7 @@ class Node {
             keys[j + 1] = keys[j];
         }
         keys[i] = y->keys[1];
-        num++;
+        ++num;
     }
 
     void insertNonFull(data k) {
@@ -104,7 +195,7 @@ class Node {
             keys[j] = keys[j + 1];
         }
         keys[num - 1] = 0;
-        num--;
+        --num;
     }
 
     void stealLeft(int i) {
@@ -169,97 +260,6 @@ class Node {
             x = x->links[x->num];
         }
         return x->keys[x->num - 1];
-    }
-
-    bool remove(data key) {
-        int i;
-        for (i = 0; i < num; ++i) {
-            if (key <= keys[i]) {
-                ++i;
-                break;
-            }
-            if (i == num - 1)
-                i = num;
-        }
-        --i;
-        if (i != num && key == keys[i]) {
-            if (leaf) {
-                for (int j = i; j < num - 1; ++j) {
-                    keys[j] = keys[j + 1];
-                }
-                num--;
-                keys[num] = 0;
-                return true;
-            } else {
-                if (links[i]->num >= 2) {
-                    auto nkey = getMax(i);
-                    keys[i] = nkey;
-                    return links[i]->remove(nkey);
-                } else if (links[i + 1]->num >= 2) {
-                    auto nkey = getMin(i + 1);
-                    keys[i] = nkey;
-                    return links[i + 1]->remove(nkey);
-                } else {
-                    mergeChild(i);
-                    return links[i]->remove(key);
-                }
-            }
-
-        } else {
-            if (leaf) {
-                return false;
-            } else {
-                if (links[i]->num == 1) {
-                    if (i > 0 && links[i - 1]->num >= 2) {
-                        stealLeft(i);
-                    } else if (i < num && links[i + 1]->num >= 2) {
-                        stealRight(i);
-                    } else {
-                        if (i > 0) {
-                            mergeChild(i - 1);
-                            --i;
-                        } else {
-                            mergeChild(i);
-                        }
-                    }
-                }
-                return links[i]->remove(key);
-            }
-        }
-    }
-
-    void print(int d) {
-        std::cout << "\nlvl=" << d << "=|";
-        for (int i = 0; i < num; ++i) {
-            std::cout << keys[i] << "|";
-        }
-
-        if (!leaf) {
-            for (int i = 0; i <= num; ++i) {
-                links[i]->print(d + 1);
-            }
-        }
-    }
-
-    int search(data key) {
-        int i;
-        for (i = 0; i < num; ++i) {
-            if (key <= keys[i]) {
-                ++i;
-                break;
-            }
-            if (i == num - 1) {
-                i = num;
-            }
-        }
-        --i;
-        if (i != num && key == keys[i]) {
-            return i;
-        } else if (leaf) {
-            return -1;
-        } else {
-            return links[i]->search(key);
-        }
     }
 };
 

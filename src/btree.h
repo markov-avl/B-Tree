@@ -9,6 +9,7 @@ template<typename data>
 class BTree {
 private:
     Node<data> *root;
+
 public:
     BTree() {
         root = nullptr;
@@ -18,12 +19,12 @@ public:
         delete root;
     }
 
-    bool search(data key) {
-        return root != nullptr && root->search(key) >= 0;
+    bool find(data key) {
+        return root != nullptr && root->find(key) >= 0;
     }
 
     bool add(data key) {
-        if (search(key)) {
+        if (find(key)) {
             return true;
         }
         if (root == nullptr) {
@@ -64,7 +65,7 @@ public:
         if (root != nullptr) {
             root->print(0);
         } else {
-            std::cout << "\nBTree is empty" << std::endl;
+            std::cout << "B-Tree is empty";
         }
     }
 };
