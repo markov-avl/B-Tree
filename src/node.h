@@ -106,17 +106,16 @@ struct Node {
     }
 
     void print(int d) {
-        if (d == 0) {
-            std::cout << "\nRoot: |";
-        } else {
-            std::cout << "\nLevel " << d << ": |";
+        for (int i = 0; i < d; i++) {
+            std::cout << "        ";
         }
-        for (int i = 0; i < num; ++i) {
+        std::cout << "|";
+        for (int i = 0; i < num; i++) {
             std::cout << keys[i] << "|";
         }
-
+        std::cout << std::endl;
         if (!leaf) {
-            for (int i = 0; i <= num; ++i) {
+            for (int i = 0; i <= num; i++) {
                 links[i]->print(d + 1);
             }
         }
