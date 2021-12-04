@@ -109,9 +109,9 @@ struct Node {
         for (int i = 0; i < d; i++) {
             std::cout << "        ";
         }
-        std::cout << "|";
+        std::cout << " ";
         for (int i = 0; i < num; i++) {
-            std::cout << keys[i] << "|";
+            std::cout << keys[i] << " ";
         }
         std::cout << std::endl;
         if (!leaf) {
