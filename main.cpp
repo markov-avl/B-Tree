@@ -9,12 +9,12 @@ int main() {
     while (command != "end") {
         std::cout << "Input command: ";
         std::getline(std::cin, command);
-        if (std::regex_match(command, std::regex("add [-]?[\\d]*"))) {
-            command.erase(0, 4);
+        if (std::regex_match(command, std::regex("a [-]?[\\d]*"))) {
+            command.erase(0, 2);
             bTree.add(stoi(command));
             bTree.print();
-        } else if (std::regex_match(command, std::regex("del [-]?[\\d]*"))) {
-            command.erase(0, 4);
+        } else if (std::regex_match(command, std::regex("d [-]?[\\d]*"))) {
+            command.erase(0, 2);
             bTree.remove(stoi(command));
             bTree.print();
         } else if (command != "end") {

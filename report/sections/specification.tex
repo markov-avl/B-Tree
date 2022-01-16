@@ -1,0 +1,39 @@
+\section{Спецификация}
+
+
+\subsection{Поля класса BTree}
+
+
+\begin{enumerate}
+    \item \texttt{root} -- ссылка на корень дерева типа \texttt{Node<data>*}, где:
+        \begin{itemize}
+            \item \texttt{Node} -- структура узла дерева;
+            \item \texttt{data} -- тип данных шаблона дерева.
+        \end{itemize}
+\end{enumerate}
+
+
+\subsection{Методы класса BTree}
+
+
+\begin{enumerate}
+    \item \textbf{Конструктор} \\
+    \texttt{BTree::BTree()} -- инициализирует \texttt{root} значением \texttt{nullptr}.
+    
+    \item \textbf{Деструктор} \\
+    \texttt{BTree::$\sim$BTree()} -- рекурсивно очищает выделенную память, начиная с \texttt{root}.
+    
+    \item \textbf{Добавление} \\
+    \texttt{bool BTree::add(data key)} -- добавляет элемент шаблонного типа в структуру дерева. Если такой же элемент уже находится в дереве, то элемент не добавляется, и в таком случае возвращается \texttt{false}. В ином случае возвращается \texttt{true}.
+    
+    \item \textbf{Удаление} \\
+    \texttt{bool BTree::remove(data key)} -- удаляет элемент шаблонного типа из структуры дерева. Если такого элемента не существует в дереве, то элемент не удаляется, и в таком случае возвращается \texttt{false}. В ином случае возвращается \texttt{true}.
+    
+    \item \textbf{Поиск} \\
+    \texttt{bool BTree::find(data key)} -- рекурсивно ищет по всем узлам дерева элемент с таким же значением. Если такой элемент не существует в дереве, то возвращается \texttt{false}. В ином случае возвращается \texttt{true}.
+    
+    \item \textbf{Печать} \\
+    \texttt{void BTree::print()} -- выводит в консоль визуальное представление дерева (корень отрисовывается слева, а листья дерева -- справа). Если дерево пусто, то в консоль выводится следующее сообщение: <<\texttt{B-Tree is empty}>>.
+\end{enumerate}
+
+\newpage

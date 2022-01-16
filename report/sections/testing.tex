@@ -1,0 +1,102 @@
+\section{Тестирование}
+
+\setlength{\parskip}{1.0ex}
+\small
+\renewcommand{\arraystretch}{2}
+\newcommand{\tab}{\hspace{0.9cm}}
+\newcommand{\test}[1]{\begin{spacing}{0.5}\texttt{\begin{tabular}[c]{l}#1\end{tabular}}\end{spacing}}
+
+
+\begin{xltabular}[h]{\textwidth}{|p{0.25 \textwidth}|X|X|}
+    \caption{Тестирование конструктора\label{tab:constructor-testing}} \\
+    \hline
+    \textbf{Тестовая ситуация} & \textbf{Входные данные} & \textbf{Выходные данные} \\
+    \hline \endhead
+    Создание пустого дерева & \test{BTree btree} & \test{btree: \{\\\tab root = nullptr;\\\}} \\
+    \hline
+\end{xltabular}
+
+
+\begin{xltabular}[h]{\textwidth}{|p{0.25 \textwidth}|X|X|}
+    \caption{Тестирование деструктора\label{tab:destructor-testing}} \\
+    \hline
+    \textbf{Тестовая ситуация} & \textbf{Входные данные} & \textbf{Выходные данные} \\
+    \hline \endhead
+    Удаление пустого дерева & \test{btree: \{\\\tab root = nullptr;\\\}} & \test{btree: \{\\\tab root = nullptr;\\\}} \\
+    \hline
+    Удаление непустого дерева & \test{btree: \{\\\tab root = 0x00000001;\\\}} & \test{btree: \{\\\tab root = nullptr;\\\}} \\
+    \hline
+\end{xltabular}
+
+
+\begin{xltabular}[h]{\textwidth}{|p{0.25 \textwidth}|X|X|}
+    \caption{Тестирование добавления\label{tab:add-testing}} \\
+    \hline
+    \textbf{Тестовая ситуация} & \textbf{Входные данные} & \textbf{Выходные данные} \\
+    \hline \endhead
+    Добавление в пустое дерево & \test{btree:\\B-tree is empty\\key: 1} & \test{btree:\\1\\return: true} \\
+    \hline
+    Добавление в непустое дерево & \test{btree:\\1\\key: 2} & \test{btree:\\2\\1\\return: true} \\
+    \hline
+    Переполнение в корневом узле & \test{btree:\\3\\2\\1\\key: 4} & \test{btree:\\\tab 3 4\\2\\\tab 1\\return: true} \\
+    \hline
+    Переполнение на 2-м уровне & \test{btree:\\\tab 7 8\\6\\\tab 5\\4\\\tab 3\\2\\\tab 1\\key: 9} & \test{btree:\\\tab\tab 7 8 9\\\tab 6\\\tab\tab 5\\4\\\tab\tab 3\\\tab 2\\\tab\tab 1\\return: true} \\
+    \hline
+    Добавление существующего ключа & \test{btree:\\1\\key: 1} & \test{btree:\\1\\return: false} \\
+    \hline
+\end{xltabular}
+
+
+\begin{xltabular}[h]{\textwidth}{|p{0.25 \textwidth}|X|X|}
+    \caption{Тестирование удаления\label{tab:remove-testing}} \\
+    \hline
+    \textbf{Тестовая ситуация} & \textbf{Входные данные} & \textbf{Выходные данные} \\
+    \hline \endhead
+    Удаление, не приводящее к перебалансировке & \test{btree:\\\tab 16 19\\15\\\tab 11\\10\\\tab 3 5\\2\\\tab 0 1\\key: 5} & \test{btree:\\\tab 16 19\\15\\\tab 11\\10\\\tab 3\\2\\\tab 0 1\\return: true} \\
+    \hline
+    Удаление, приводящее к перебалансировке & \test{btree:\\\tab\tab 16 24\\\tab 15\\\tab\tab 11 14\\10\\\tab\tab 3 7\\\tab 2\\\tab\tab 1\\key: 14} & \test{btree:\\\tab 16 24\\15\\\tab 11\\10\\\tab 3 7\\2\\\tab 1\\return: true} \\
+    \hline
+    Удаление последнего элемента & \test{btree:\\10\\key: 10} & \test{btree:\\B-tree is empty\\return: true} \\
+    \hline
+    Удаление несуществующего элемента & \test{btree:\\\tab\tab 16 24\\\tab 15\\\tab\tab 11 14\\10\\\tab\tab 3 7\\\tab 2\\\tab\tab 1\\key: 8} & \test{btree:\\\tab\tab 16 24\\\tab 15\\\tab\tab 11 14\\10\\\tab\tab 3 7\\\tab 2\\\tab\tab 1\\return: false} \\
+    \hline
+\end{xltabular}
+
+
+\begin{xltabular}[h]{\textwidth}{|p{0.25 \textwidth}|X|X|}
+    \caption{Тестирование поиска\label{tab:find-testing}} \\
+    \hline
+    \textbf{Тестовая ситуация} & \textbf{Входные данные} & \textbf{Выходные данные} \\
+    \hline \endhead
+    Поиск минимального элемента в дереве & \test{btree:\\\tab 16 19\\15\\\tab 11\\10\\\tab 3 5\\2\\\tab 0 1\\key: 0} & \test{return: true} \\
+    \hline
+    Поиск максимального элемента в дереве & \test{btree:\\\tab 16 19\\15\\\tab 11\\10\\\tab 3 5\\2\\\tab 0 1\\key: 19} & \test{return: true} \\
+    \hline
+    Поиск не минимального и не максимального элемента в дереве & \test{btree:\\\tab 16 19\\15\\\tab 11\\10\\\tab 3 5\\2\\\tab 0 1\\key: 15} & \test{return: true} \\
+    \hline
+    Поиск несуществующего элемента в дереве & \test{btree:\\\tab 16 19\\15\\\tab 11\\10\\\tab 3 5\\2\\\tab 0 1\\key: 53} & \test{return: false} \\
+    \hline
+\end{xltabular}
+
+
+\begin{xltabular}[h]{\textwidth}{|p{0.25 \textwidth}|X|X|}
+    \caption{Тестирование печати\label{tab:print-testing}} \\
+    \hline
+    \textbf{Тестовая ситуация} & \textbf{Входные данные} & \textbf{Выходные данные} \\
+    \hline \endhead
+    Печать пустого дерева & \test{btree: \{\\\tab root = nullptr;\\\}} & \test{out:\\B-tree is empty} \\
+    \hline
+    Печать одного элемента & \test{btree:\\10} & \test{out:\\10} \\
+    \hline
+    Печать нескольких элементов в корневом узле & \test{btree:\\3\\2\\1} & \test{out:\\1 2 3} \\
+    \hline
+    Печать 2-го уровня & \test{btree:\\\tab 7 8\\6\\\tab 5\\4\\\tab 3\\2\\\tab 1} & \test{out:\\2 4 6\\\tab\tab 1\\\tab\tab 3\\\tab\tab 5\\\tab\tab 7 8} \\
+    \hline
+    Печать 3-го уровня & \test{btree:\\\tab\tab 16 24\\\tab 15\\\tab\tab 11 14\\10\\\tab\tab 3 7\\\tab 2\\\tab\tab 1} & \test{out:\\10\\\tab 2\\\tab\tab 1\\\tab\tab 3 7\\\tab 15\\\tab\tab 11 14\\\tab\tab 16 24} \\
+    \hline
+    Печать пустого дерева & \test{btree: \{\\\tab root = nullptr;\\\}} & \test{out:\\B-tree is empty} \\
+    \hline
+\end{xltabular}
+
+
+\newpage
